@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<h2>All Orders</h2>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    {% if is_admin %}
+        <div class="alert alert-info d-flex align-items-center" role="alert">
+            <i class="bi bi-shield-check me-2"></i>
+            Viewing as <strong>Admin</strong> — all vendor orders visible
+        </div>
+    {% endif %}
+
+    {% if order_items %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Customer</th>
+                        <th>Order Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order_item in order_items %}
+                    <tr>
+                        <td>#{{ order_item.order.id }}</td>
+                        <td>
+                            {{ order_item.product.name }}<br>
+                            <small class="text-muted">
+                                Vendor: {{ order_item.product.vendor.username }}
+                            </small>
+                        </td>
+                        <td>{{ order_item.quantity }}</td>
+                        <td>${{ order_item.price }}</td>
+                        <td>
+                            {{ order_item.order.customer.username }}
+                        </td>
+                        <td>{{ order_item.order.created_at|date:"M d, Y H:i" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="text-center mt-5">
+            <h5 class="text-muted">No orders found.</h5>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

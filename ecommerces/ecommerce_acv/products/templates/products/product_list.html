@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Available Products{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Available Products</h2>
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-4 mb-4">  {# ✅ Reduced bottom margin #}
+                <div class="card shadow-sm bg-white rounded">
+                    
+                    {# ✅ Display product image #}
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top p-2" 
+                             alt="{{ product.name }}" style="height: 120px; object-fit: contain; background-color: #f8f8f8;">
+                    {% else %}
+                        <img src="{% static 'images/default-product.jpg' %}" class="card-img-top p-2" 
+                             alt="Default Image" style="height: 180px; object-fit: contain; background-color: #f8f8f8;">
+                    {% endif %}
+
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text"><strong>Price:</strong> ${{ product.price }}</p>
+
+                        {# ✅ Add to Cart Button #}
+                        <form action="{% url 'cart:add_to_cart' product.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center">No products available.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- ✅ FontAwesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Vendor Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    .dashboard {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+    .dashboard-card {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 10px;
+        width: 30%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    .dashboard-card h3 {
+        margin-bottom: 10px;
+        color: #333;
+    }
+</style>
+
+<div class="container mt-4">
+    
+    <h2>Welcome, {{ user.username }}!</h2>
+    <p>Manage your products and orders.</p>
+
+    <h3 class="mt-4">Quick Links</h3>
+    <div class="d-flex flex-wrap gap-3 mt-3">
+        {% url 'vendors:vendor_product_list' as vendor_product_list %}
+        {% url 'vendors:vendor_order_list' as vendor_order_list %}
+        {% url 'vendors:inventory' as inventory %}
+        <!-- {% url 'vendors:vendor_supplier_list' as vendor_supplier_list %} -->
+
+        <a href="{{ vendor_product_list }}" class="btn btn-primary">Manage Products</a>
+        <a href="{{ vendor_order_list }}" class="btn btn-warning">View Paid Orders</a>
+        <a href="{{ inventory }}" class="btn btn-success">My Inventory</a>
+        <!-- <a href="{% url 'vendors:all_orders' %}">View All Orders</a> -->
+
+        <!-- <a href="{{ vendor_supplier_list }}" class="btn btn-info">Manage Suppliers</a> -->
+    </div>
+</div>
+{% endblock %}

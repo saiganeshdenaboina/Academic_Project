@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load cart_extras %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Checkout</h2>
+
+    {% if cart_items %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <!-- Cart Items Table -->
+                <div class="col-md-8">
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart_items %}
+                            <tr>
+                                <td>{{ item.product.name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>${{ item.product.price|floatformat:2 }}</td>
+                                <td>${{ item.product.price|multiply:item.quantity|floatformat:2 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Order Summary  -->
+                <div class="col-md-4">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h4 class="card-title">Order Summary</h4>
+                            <hr>
+                            <p><strong>Items:</strong> {{ cart_items|length }}</p>
+                            <p><strong>Total Price:</strong> 💰 ${{ total_price|floatformat:2 }}</p>
+                            <hr>
+                            <button type="submit" class="btn btn-success btn-block">✅ Confirm Order</button>
+                            <a href="{% url 'cart:view_cart' %}" class="btn btn-secondary btn-block mt-2">🔙 Back to Cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    {% else %}
+        <div class="alert alert-warning text-center">
+            <h4>Your cart is empty! 🛒</h4>
+            <a href="{% url 'product_list' %}" class="btn btn-primary mt-3">🛍️ Continue Shopping</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Logistics Dashboard{% endblock %}
+
+{% block content %}
+<h2>Welcome, {{ user.username }}!</h2>
+<p>Manage warehouses, shipments, and fleet operations.</p>
+
+<h3>Quick Links</h3>
+<a href="{% url 'logistics:warehouse_list' %}" class="btn btn-primary">Manage Warehouses</a>
+<a href="{% url 'logistics:shipment_list' %}" class="btn btn-warning">Track Shipments</a>
+<a href="{% url 'logistics:fleet_list' %}" class="btn btn-success">Manage Fleet</a>
+{% endblock %}
+

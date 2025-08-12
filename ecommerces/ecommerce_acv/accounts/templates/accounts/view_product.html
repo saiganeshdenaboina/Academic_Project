@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}View Product{% endblock %}
+
+{% block content %}
+<h2>Product Details</h2>
+<p><strong>Product ID:</strong> {{ product.id }}</p>
+<p><strong>Name:</strong> {{ product.name }}</p>
+<p><strong>Price:</strong> ${{ product.price }}</p>
+<p><strong>Stock:</strong> {{ product.stock }}</p>
+<p><strong>Description:</strong> {{ product.description }}</p>
+<img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+<a href="{% url 'product_management' %}" class="btn btn-secondary mt-3">Back to Product Management</a>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Product Management{% endblock %}
+
+{% block content %}
+<h2>Product Management</h2>
+
+<style>
+    .table {
+        margin-top: 20px;
+    }
+    .btn {
+        margin-right: 5px;
+    }
+    form {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    form input, form select, form textarea {
+        margin-bottom: 15px;
+    }
+    form button {
+        width: 100%;
+    }
+    .product-management {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .product-management h2 {
+        text-align: center;
+        color: #333;
+    }
+    .product-management table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .product-management table th, .product-management table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    .product-management table th {
+        background: #007bff;
+        color: #fff;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<p>Manage all products in the system. You can add, edit, or delete products from here.</p>
+<a href="{% url 'admin_dashboard' %}" class="btn btn-primary mb-3">Go to Dashboard</a>
+
+<!-- Search Bar -->
+<form method="GET" class="mb-3">
+    <input type="text" name="search" placeholder="Search products..." class="form-control" value="{{ request.GET.search }}">
+    <button type="submit" class="btn btn-primary mt-2">Search</button>
+</form>
+
+<!-- Enhanced Product List Table -->
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Product ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Current Stock</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr>
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>${{ product.price }}</td>
+            <td>{{ product.current_stock }}</td>
+            <td>
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 50px; height: 50px;">
+                {% else %}
+                No Image
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'view_product' product.id %}" class="btn btn-info btn-sm">View</a>
+                <a href="{% url 'edit_product' product.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'delete_product' product.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center">No products found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

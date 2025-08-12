@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+<!-- Include Bootstrap CSS for modal functionality -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}
+
+{% block title %}Order Management{% endblock %}
+
+{% block content %}
+<p>Manage all customer orders, including tracking and updates.</p>
+<a href="{% url 'admin_dashboard' %}" class="btn btn-primary mb-3">Go to Dashboard</a>
+
+<h2>Order Management</h2>
+
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.customer.username }}</td>
+            <td>{{ order.status }}</td>
+            <td>${{ order.total }}</td>
+            <td>
+                <a href="{% url 'view_order' order.id %}" class="btn btn-info btn-sm">View</a>
+                <a href="{% url 'edit_order' order.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'delete_order' order.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

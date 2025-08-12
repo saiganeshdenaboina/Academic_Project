@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Edit User{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Edit User: {{ user.username }}</h2>
+
+<form method="POST" class="needs-validation" novalidate>
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label for="id_username" class="form-label">Username</label>
+        {{ form.username }}
+    </div>
+
+    <div class="mb-3">
+        <label for="id_email" class="form-label">Email</label>
+        {{ form.email }}
+    </div>
+
+    <div class="mb-3">
+        <label for="id_phone" class="form-label">Phone</label>
+        {{ form.phone }}
+    </div>
+
+    <div class="mb-3">
+        <label for="id_address" class="form-label">Address</label>
+        {{ form.address }}
+    </div>
+
+    <div class="mb-3">
+        <label for="id_role" class="form-label">Role</label>
+        {{ form.role }}
+    </div>
+
+    <div id="vendor-type-container" class="mb-3" style="display: none;">
+        <label for="id_vendor_type" class="form-label">Vendor Type</label>
+        {{ form.vendor_type }}
+    </div>
+
+    <div class="mb-3">
+        <label for="id_is_role_approved" class="form-label">Approval Status</label>
+        {{ form.is_role_approved }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const roleField = document.querySelector("#id_role");
+        const vendorTypeContainer = document.querySelector("#vendor-type-container");
+
+        function toggleVendorType() {
+            if (roleField.value === "Vendor") {
+                vendorTypeContainer.style.display = "block";
+            } else {
+                vendorTypeContainer.style.display = "none";
+            }
+        }
+
+        roleField.addEventListener("change", toggleVendorType);
+        toggleVendorType(); // Initial check
+    });
+</script>
+
+{% endblock %}

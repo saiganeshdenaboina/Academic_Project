@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment Management{% endblock %}
+
+{% block content %}
+<h2>Payment Management</h2>
+<p>Manage all payment-related operations here.</p>
+
+<p>Manage all payment-related operations, including refunds and transactions.</p>
+<a href="{% url 'admin_dashboard' %}" class="btn btn-primary mb-3">Go to Dashboard</a>
+
+<style>
+    .payment-section {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    .payment-section h3 {
+        margin-top: 0;
+    }
+    .btn {
+        margin-top: 10px;
+    }
+    form {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    form input, form select, form textarea {
+        margin-bottom: 15px;
+    }
+    form button {
+        width: 100%;
+    }
+    .payment-management {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .payment-management h2 {
+        text-align: center;
+        color: #333;
+    }
+    .payment-management table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .payment-management table th, .payment-management table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    .payment-management table th {
+        background: #28a745;
+        color: #fff;
+    }
+</style>
+
+<div class="payment-section">
+    <h3>View All Transactions</h3>
+    <p>Here you can view all transactions.</p>
+
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Transaction ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in payments %}
+            <tr>
+                <td>{{ payment.id }}</td>
+                <td>${{ payment.amount }}</td>
+                <td>{{ payment.status }}</td>
+                <td>{{ payment.date }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">No transactions found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="payment-section">
+    <h3>Manage Pending Payments/Refunds</h3>
+    <p>Here you can manage pending payments and refunds.</p>
+
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Transaction ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in payments %}
+            {% if payment.status == 'Pending' %}
+            <tr>
+                <td>{{ payment.id }}</td>
+                <td>${{ payment.amount }}</td>
+                <td>{{ payment.status }}</td>
+                <td>
+                    <button class="btn btn-success btn-sm">Approve</button>
+                    <button class="btn btn-danger btn-sm">Reject</button>
+                </td>
+            </tr>
+            {% endif %}
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">No pending payments found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="payment-section">
+    <h3>Download Invoices</h3>
+    <p>Here you can download invoices for completed transactions.</p>
+    <a href="{% url 'download_invoices' %}" class="btn btn-success">Download Invoices</a>
+</div>
+
+<script>
+    document.querySelector('.btn-primary').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default navigation
+        window.location.href = '{% url "admin_dashboard" %}'; // Redirect without pop-up
+    });
+
+    document.querySelector('.btn-warning').addEventListener('click', function() {
+        alert('Manage Payments button clicked! Implement functionality here.');
+    });
+
+    document.querySelector('.btn-success').addEventListener('click', function() {
+        alert('Download Invoices button clicked! Implement functionality here.');
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}My Inventory{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">My Inventory</h3>
+    <a href="{% url 'vendors:vendor_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+  </div>
+
+  <div class="table-responsive shadow rounded">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-dark sticky-top">
+        <tr>
+          <th scope="col">Product</th>
+          <th scope="col">Total Stock Added</th>
+          <th scope="col">Balance Stock</th>
+          <th scope="col">Last Updated</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in inventory_items %}
+          <tr>
+            <td class="fw-semibold">{{ item.name }}</td>
+            <td>{{ item.total_stock_added|default:"0" }}</td>
+            <td>
+              {% if item.current_stock <= 5 %}
+                <span class="badge bg-danger">{{ item.current_stock }}</span>
+              {% elif item.current_stock <= 20 %}
+                <span class="badge bg-warning text-dark">{{ item.current_stock }}</span>
+              {% else %}
+                <span class="badge bg-success">{{ item.current_stock }}</span>
+              {% endif %}
+            </td>
+            <td>{{ item.updated_at|date:"M d, Y H:i" }}</td>
+            <td>
+              <a href="{% url 'vendors:update_inventory' item.id %}" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-pencil-square"></i> Edit
+              </a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5" class="text-center text-muted">No inventory items found.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

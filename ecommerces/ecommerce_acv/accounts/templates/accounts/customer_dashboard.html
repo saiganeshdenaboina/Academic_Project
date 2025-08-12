@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Welcome, {{ user.username }}! 🎉</h2>
+
+    <!-- 🛍 Product Browsing -->
+    <h3 class="mt-4">Browse Products</h3>
+    <a href="{% url 'product_list' %}" class="btn btn-primary">🛒 View Products</a>
+
+    <!-- 🛒 Cart Management -->
+    <h3 class="mt-4">Your Cart</h3>
+    <a href="{% url 'cart:view_cart' %}" class="btn btn-warning">🛍 View Cart</a>
+
+    <!-- 📦 Order Tracking -->
+    <h3 class="mt-4">Your Orders</h3>
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Order ID</th>
+                <th>Products</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>#{{ order.id }}</td>
+                <td>
+                    <ul class="mb-0">
+                        {% for item in order.order_items.all %}  <!-- ✅ Corrected product loop -->
+                            <li>{{ item.product.name }} (x{{ item.quantity }})</li>
+                        {% empty %}
+                            <li class="text-muted">No products found</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <span class="badge 
+                        {% if order.status == 'Pending' %} bg-warning text-dark
+                        {% elif order.status == 'Accepted' %} bg-primary
+                        {% elif order.status == 'Packaged' %} bg-info text-dark
+                        {% elif order.status == 'Shipped' %} bg-secondary
+                        {% elif order.status == 'Out for Delivery' %} bg-success
+                        {% elif order.status == 'Delivered' %} bg-success
+                        {% elif order.status == 'Cancelled' %} bg-danger
+                        {% else %} bg-light text-dark {% endif %}">
+                        {{ order.status }}
+                    </span>
+                </td>
+                <td>${{ order.total_price }}</td>
+                <td>
+                    <a href="{% url 'orders:order_details' order.id %}" class="btn btn-info btn-sm">👁 View</a>
+                    
+                    {% if order.status == "Delivered" %}
+                        <a href="{% url 'reviews:add_review' order.id %}" class="btn btn-success btn-sm">⭐ Leave Review</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center text-muted">No orders placed yet. 🛒</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

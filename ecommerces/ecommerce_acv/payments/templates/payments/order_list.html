@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Your Orders{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-5 display-6 fw-semibold">📦 Your Orders</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} text-center shadow-sm rounded-3">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% if orders %}
+        <div class="table-responsive rounded-4 shadow-sm">
+            <table class="table table-bordered table-hover align-middle mb-0">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th scope="col">#ID</th>
+                        <th scope="col">🕒 Order Date</th>
+                        <th scope="col">📌 Status</th>
+                        <th scope="col">💰 Total</th>
+                        <th scope="col">⚙️ Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center bg-light">
+                    {% for order in orders %}
+                    <tr class="align-middle">
+                        <td class="fw-bold text-primary">#{{ order.id }}</td>
+                        <td>{{ order.order_date|date:"M d, Y H:i" }}</td>
+                        <td>
+                            <span class="badge text-capitalize px-3 py-2 rounded-pill d-inline-flex align-items-center gap-1
+                                {% if order.status == 'Pending' %} bg-warning text-dark 
+                                {% elif order.status == 'Delivered' %} bg-success 
+                                {% elif order.status == 'Cancelled' %} bg-danger 
+                                {% else %} bg-secondary {% endif %}">
+                                {% if order.status == 'Pending' %}
+                                    ⏳
+                                {% elif order.status == 'Delivered' %}
+                                    ✅
+                                {% elif order.status == 'Cancelled' %}
+                                    ❌
+                                {% else %}
+                                    🔄
+                                {% endif %}
+                                {{ order.status }}
+                            </span>
+                        </td>
+                        <td class="fw-bold text-success">${{ order.total_price|floatformat:2 }}</td>
+                        <td>
+                            <div class="d-flex flex-wrap justify-content-center gap-2">
+                                <a href="{% url 'orders:order_details' order.id %}" class="btn btn-outline-primary btn-sm" title="View Details">
+                                    👁️ View
+                                </a>
+                                {% if order.status == "Pending" %}
+                                    <a href="{% url 'payments:pay_order' order.id %}" class="btn btn-success btn-sm" title="Pay for this order">
+                                        💳 Pay Now
+                                    </a>
+                                {% endif %}
+                                {% if order.status == "Delivered" %}
+                                    <a href="{% url 'add_review' order.id %}" class="btn btn-outline-success btn-sm" title="Leave a review">
+                                        📝 Review
+                                    </a>
+                                {% endif %}
+                                <a href="{% url 'orders:download_invoice' order.id %}" class="btn btn-outline-secondary btn-sm" title="Download invoice">
+                                    📄 Invoice
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center shadow-sm p-5 rounded-4">
+            <h4 class="fw-bold mb-3">No orders found! 🛒</h4>
+            <p class="mb-4">Looks like you haven’t placed any orders yet.</p>
+            <a href="{% url 'product_list' %}" class="btn btn-primary btn-lg px-4 py-2">🛍️ Start Shopping</a>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    tr:hover {
+        transition: background-color 0.2s ease;
+        background-color: #f1f3f5 !important;
+    }
+</style>
+{% endblock %}

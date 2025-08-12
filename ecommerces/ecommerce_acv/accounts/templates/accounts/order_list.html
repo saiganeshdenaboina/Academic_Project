@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Your Orders{% endblock %}
+
+{% block content %}
+<h2>Your Orders</h2>
+
+<!-- Show message if no orders exist -->
+{% if not orders %}
+    <p class="text-muted">You have not placed any orders yet.</p>
+{% else %}
+    <table class="table table-striped mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Order ID</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.product.name }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>${{ order.total_price }}</td>
+                <td>
+                    <span class="badge {% if order.status == 'Delivered' %}bg-success{% elif order.status == 'Shipped' %}bg-info{% else %}bg-warning{% endif %}">
+                        {{ order.status }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{% url 'order_details' order.id %}" class="btn btn-info btn-sm">View</a>
+                    {% if order.status == "Delivered" %}
+                        <a href="{% url 'add_review' order.product.id %}" class="btn btn-success btn-sm">Leave Review</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% endblock %}

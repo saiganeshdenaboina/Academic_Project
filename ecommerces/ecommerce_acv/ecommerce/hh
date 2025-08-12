@@ -1,0 +1,24 @@
+Feature	URL
+Login Page	http://127.0.0.1:8000/accounts/login/
+Logout	http://127.0.0.1:8000/accounts/logout/
+Admin Dashboard	http://127.0.0.1:8000/accounts/admin-dashboard/
+Vendor Dashboard	http://127.0.0.1:8000/accounts/vendor-dashboard/
+Customer Dashboard	http://127.0.0.1:8000/accounts/customer-dashboard/
+Order List	http://127.0.0.1:8000/accounts/orders/
+403 Permission Denied	http://127.0.0.1:8000/accounts/403/
+404 Page Not Found	http://127.0.0.1:8000/accounts/404/
+
+
+from accounts.models import CustomUser, Role
+
+# Fetch the user
+user = CustomUser.objects.get(username="admin")
+
+# Fetch or create the "Admin" role
+admin_role, created = Role.objects.get_or_create(name="Admin")
+
+# Assign the role to the user
+user.role = admin_role
+user.save()
+
+print(f"Updated {user.username} to role: {user.role.name}")

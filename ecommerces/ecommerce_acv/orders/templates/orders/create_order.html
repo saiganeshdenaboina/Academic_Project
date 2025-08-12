@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Create Order{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Create a New  Order</h2>
+    <form method="POST" class="mt-3">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Place Order</button>
+    </form>
+    <a href="{% url 'order_list' %}" class="btn btn-secondary mt-3">Back to Orders</a>
+</div>
+{% endblock %}
+

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Vendor List{% endblock %}
+
+{% block content %}
+<a href="{% url 'vendors:vendor_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+<h2>All Vendors</h2>
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Vendor Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vendor in vendors %}
+        <tr>
+            <td>{{ vendor.username }}</td>
+            <td>{{ vendor.email }}</td>
+            <td>
+                <a href="#" class="btn btn-info">View Details</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">No vendors found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+

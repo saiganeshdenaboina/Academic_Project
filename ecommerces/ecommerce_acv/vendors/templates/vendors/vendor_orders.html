@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load humanize %}  <!-- Load humanize for better number formatting -->
+
+{% block title %}Vendor Orders{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary">📦 Paid Orders</h2>
+        <a href="{% url 'vendors:vendor_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <p><strong>Debug Count:</strong> {{ orders|length }}</p>
+
+    {% if orders %}
+        <table class="table table-striped table-hover shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders|dictsortreversed:"order_date" %}
+                    <tr>
+                        <td>#{{ order.id }}</td>
+                        <td>{{ order.customer.username }}</td>
+                        <td>${{ order.total_price|intcomma }}</td>  <!-- Adds commas for better readability -->
+                        <td><span class="badge bg-success">{{ order.status }}</span></td>
+                        <td>{{ order.order_date|date:"M d, Y, g:i A" }}</td>  <!-- Formats date nicely -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-warning text-center">
+            No paid orders found for <strong>{{ request.user.username }}</strong>.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

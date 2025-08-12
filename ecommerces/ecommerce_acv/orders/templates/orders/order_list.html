@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+ 
+{% block title %}Update Order{% endblock %}
+
+{% block content %} 
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Manage Your Orders</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped align-middle text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Order Date</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>#{{ order.id }}</td>
+                            <td>{{ order.order_date|date:"M d, Y H:i" }}</td>
+                            <td>
+                                <span class="badge bg-info text-dark">{{ order.status }}</span>
+                            </td>
+                            <td><strong>${{ order.total_price }}</strong></td>
+                            <td>
+                                <a href="{% url 'orders:order_details' order.id %}" class="btn btn-sm btn-outline-primary me-1">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                                <a href="{% url 'orders:update_order' order.id %}" class="btn btn-sm btn-outline-warning me-1">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                                <a href="{% url 'payments:pay_order' order.id %}" class="btn btn-sm btn-outline-success">
+                                    <i class="bi bi-credit-card"></i> Pay
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-muted py-4">
+                                <em>You have no orders yet. Why not make one and feel something?</em>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

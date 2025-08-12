@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Manual Payment{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Complete Your Payment</h2>
+    <p class="text-muted text-center">Please follow the instructions to complete your payment.</p>
+
+    <div class="alert alert-info">
+        <strong>Bank Transfer Details:</strong>
+        <ul>
+            <li><b>Bank Name:</b> XYZ Bank</li>
+            <li><b>Account Number:</b> 1234567890</li>
+            <li><b>IFSC Code:</b> XYZ1234</li>
+        </ul>
+        <p>Once payment is completed, click "Paid" to notify the vendor.</p>
+    </div>
+
+    <form method="post" action="{% url 'payments:mark_order_paid' order.id %}">
+        {% csrf_token %}
+        <div class="text-center">
+            <button type="submit" class="btn btn-success btn-lg">✅ Paid</button>
+        </div>
+    </form>
+
+</div>
+{% endblock %}

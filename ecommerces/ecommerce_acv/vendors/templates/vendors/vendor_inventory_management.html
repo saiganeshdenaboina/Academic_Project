@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Vendor Inventory{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>📦 Vendor Inventory Management</h2>
+
+    <a href="{% url 'vendors:vendor_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+
+    {% if inventory_items %}
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Last Updated</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in inventory_items %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'vendors:update_inventory' item.id %}">
+                                {% csrf_token %}
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="0">
+                                <button type="submit" class="btn btn-sm btn-success">Update</button>
+                            </form>
+                        </td>
+                        <td>{{ item.last_updated }}</td>
+                        <td>{{ item.last_updated|date:"M d, Y H:i" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-warning mt-3">No inventory found for your products.</div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Vendor Products{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Your Products</h2>
+
+    <!-- ✅ Back to Dashboard + Add Product -->
+    <div class="d-flex gap-2 mb-3">
+        <a href="{% url 'vendors:vendor_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+        <a href="{% url 'vendors:vendor_add_product' %}" class="btn btn-primary">Add Product</a>
+    </div>
+
+    <!-- ✅ Product Table -->
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Image</th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                             style="width: 90px; height: 90px; object-fit: contain; border-radius: 4px; background-color: #f8f8f8;">
+                    {% else %}
+                        <img src="{% static 'images/default-product.jpg' %}" alt="Default Image"
+                             style="width: 90px; height: 90px; object-fit: contain; border-radius: 4px; background-color: #f8f8f8;">
+                    {% endif %}
+                </td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.category.name }}</td>
+                <td>
+                    {% if product.inventory %}
+                        <!-- {{ product.inventory.stock }} -->
+                        {{ product.current_stock }}
+
+                    {% else %}
+                        <span class="text-muted">No inventory</span>
+                    {% endif %}
+                </td>
+                <td>${{ product.price }}</td>
+                <td>
+                    <a href="{% url 'vendors:vendor_edit_product' product.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'vendors:vendor_delete_product' product.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center text-muted">No products added yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

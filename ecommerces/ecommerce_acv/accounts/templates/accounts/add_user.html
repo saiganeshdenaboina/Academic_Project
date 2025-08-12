@@ -1,0 +1,84 @@
+{% extends "base.html" %}  {# Ensure it extends base.html only once #}
+{% load widget_tweaks %}  {# Load widget_tweaks only once #}
+
+{% block title %}Add New User{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Add New User</h2>
+
+<form method="post" class="needs-validation" novalidate>
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label for="id_username" class="form-label">Username</label>
+        {{ form.username|add_class:"form-control" }}
+        <div class="text-danger">{{ form.username.errors }}</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="id_email" class="form-label">Email</label>
+        {{ form.email|add_class:"form-control" }}
+        <div class="text-danger">{{ form.email.errors }}</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="id_phone" class="form-label">Phone</label>
+        {{ form.phone|add_class:"form-control" }}
+        <div class="text-danger">{{ form.phone.errors }}</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="id_address" class="form-label">Address</label>
+        {{ form.address|add_class:"form-control" }}
+        <div class="text-danger">{{ form.address.errors }}</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="id_role" class="form-label">Role</label>
+        {{ form.role|add_class:"form-select" }}  
+        <div class="text-danger">{{ form.role.errors }}</div>
+    </div>
+
+    <!-- Vendor Type (Shown only for Vendors) -->
+    <div id="vendor-type-container" class="mb-3" style="display: none;">
+        <label for="id_vendor_type" class="form-label">Vendor Type</label>
+        {{ form.vendor_type|add_class:"form-select" }}
+        <div class="text-danger">{{ form.vendor_type.errors }}</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="id_password1" class="form-label">Password</label>
+        {{ form.password1|add_class:"form-control" }}
+        <div class="text-danger">{{ form.password1.errors }}</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="id_password2" class="form-label">Confirm Password</label>
+        {{ form.password2|add_class:"form-control" }}
+        <div class="text-danger">{{ form.password2.errors }}</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create User</button>
+</form>
+
+<!-- JavaScript to Show/Hide Vendor Type Based on Role Selection -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const roleField = document.querySelector("#id_role");
+        const vendorTypeContainer = document.querySelector("#vendor-type-container");
+
+        function toggleVendorType() {
+            let selectedRole = roleField.options[roleField.selectedIndex].text; 
+            if (selectedRole === "Vendor") {
+                vendorTypeContainer.style.display = "block";
+            } else {
+                vendorTypeContainer.style.display = "none";
+            }
+        }
+
+        roleField.addEventListener("change", toggleVendorType);
+        toggleVendorType(); // Initial check on page load
+    });
+</script>
+
+{% endblock %}

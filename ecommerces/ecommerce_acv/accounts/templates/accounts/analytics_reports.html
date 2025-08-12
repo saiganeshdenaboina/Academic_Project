@@ -1,0 +1,326 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics and Reports{% endblock %}
+
+{% block content %}
+
+<p>View detailed analytics and reports for the system's performance.</p>
+<a href="{% url 'admin_dashboard' %}" class="btn btn-primary mb-3">Go to Dashboard</a>
+    <h1 class="analytics-title">📊 Analytics Dashboard</h1>
+
+    <div class="analytics-cards">
+        <div class="analytics-card" onclick="window.location.href='/sales-details/'">
+            <h3>Total Sales</h3>
+            <p>${{ total_sales }}</p>
+        </div>
+
+        <div class="analytics-card" onclick="window.location.href='/orders-details/'">
+            <h3>Total Orders</h3>
+            <p>{{ total_orders }}</p>
+        </div>
+    </div>
+
+    <div class="analytics-graph">
+        <h3>Sales and Orders Overview</h3>
+        <canvas id="salesOrdersChart" width="400" height="200"></canvas>
+    </div>
+
+    <div class="analytics-graph">
+        <h3>Weekly Activity Heatmap</h3>
+        <canvas id="heatmapChart" width="400" height="200"></canvas>
+    </div>
+
+    <div class="analytics-graph">
+        <h3>Project Overview</h3>
+        <canvas id="projectBarChart" width="400" height="200"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('salesOrdersChart').getContext('2d');
+        const salesOrdersChart = new Chart(ctx, {
+            type: 'line', // Change to 'area' for area chart
+            data: {
+                labels: ['Point 1', 'Point 2', 'Point 3', 'Point 4', 'Point 5'], // Example points
+                datasets: [{
+                    label: 'Sales and Orders Trend',
+                    data: [10, 50, 20, 80, 30], // Example data
+                    backgroundColor: 'rgba(0, 123, 255, 0.2)', // Adjust for area chart
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 2,
+                    fill: true, // Ensure the area is filled
+                    tension: 0.4 // Smooth curves
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Sales and Orders Area Chart'
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const heatmapCtx = document.getElementById('heatmapChart').getContext('2d');
+        const heatmapData = {
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            datasets: [{
+                label: 'Activity Heatmap',
+                data: [
+                    { x: 'Monday', y: 1, v: 10 },
+                    { x: 'Monday', y: 2, v: 20 },
+                    { x: 'Tuesday', y: 1, v: 15 },
+                    { x: 'Tuesday', y: 2, v: 25 },
+                    { x: 'Wednesday', y: 1, v: 30 },
+                    { x: 'Wednesday', y: 2, v: 35 },
+                    { x: 'Thursday', y: 1, v: 40 },
+                    { x: 'Thursday', y: 2, v: 45 },
+                    { x: 'Friday', y: 1, v: 50 },
+                    { x: 'Friday', y: 2, v: 55 },
+                    { x: 'Saturday', y: 1, v: 60 },
+                    { x: 'Saturday', y: 2, v: 65 },
+                    { x: 'Sunday', y: 1, v: 70 },
+                    { x: 'Sunday', y: 2, v: 75 }
+                ],
+                backgroundColor: function(context) {
+                    const value = context.raw.v;
+                    return value > 50 ? 'rgba(255, 99, 132, 0.8)' : 'rgba(75, 192, 192, 0.8)';
+                },
+                borderWidth: 1
+            }]
+        };
+
+        const heatmapChart = new Chart(heatmapCtx, {
+            type: 'matrix',
+            data: heatmapData,
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Weekly Activity Heatmap'
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'category',
+                        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+                    },
+                    y: {
+                        type: 'linear',
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const projectCtx = document.getElementById('projectBarChart').getContext('2d');
+        const projectBarChart = new Chart(projectCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Project A', 'Project B', 'Project C', 'Project D'],
+                datasets: [{
+                    label: 'Project Progress',
+                    data: [75, 50, 90, 60], // Example data for project progress
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Project Progress Overview'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</div>
+
+<style>
+    .analytics-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        font-family: 'Arial', sans-serif;
+        position: relative;
+    }
+
+    .analytics-button-top {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+    }
+
+    .analytics-button-top button {
+        padding: 10px 20px;
+        font-size: 1em;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .analytics-button-top button:hover {
+        background-color: #0056b3;
+    }
+
+    .analytics-title {
+        text-align: center;
+        font-size: 2.5em;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .analytics-cards {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 30px;
+    }
+
+    .analytics-card {
+        flex: 1;
+        max-width: 300px;
+        margin: 0 10px;
+        padding: 20px;
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        color: #fff;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .analytics-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .analytics-card h3 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    .analytics-card p {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .analytics-graph {
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .analytics-graph h3 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+        color: #333;
+    }
+
+    .analytics-button {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .analytics-button button {
+        padding: 10px 20px;
+        font-size: 1em;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .analytics-button button:hover {
+        background-color: #0056b3;
+    }
+
+    form {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    form input, form select, form textarea {
+        margin-bottom: 15px;
+    }
+    form button {
+        width: 100%;
+    }
+
+    .analytics-page {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .analytics-page h2 {
+        text-align: center;
+        color: #333;
+    }
+    .analytics-page .chart-container {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .analytics-page .chart-container canvas {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+
+{% endblock %}

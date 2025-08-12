@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Hoyade{% endblock %}
+
+{% block content %}
+<h2>Edit Hoyade</h2>
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" class="form-control" value="{{ hoyade.name }}" required>
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name="description" id="description" class="form-control" required>{{ hoyade.description }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="image">Image</label>
+        <input type="file" name="image" id="image" class="form-control">
+        {% if hoyade.image %}
+        <img src="{{ hoyade.image.url }}" alt="{{ hoyade.name }}" style="width: 100px; height: 100px; margin-top: 10px;">
+        {% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{% url 'hoyade_management' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
