@@ -9,8 +9,9 @@ This project implements a centralized admin management system with role-based ac
 ## Team Members
 
 
-- - **M. RADHA KRISHNA** (213C1A0521)
-- - **D.V. SAI GANESH** (213C1A0509) 
+
+- - **D.V. SAI GANESH** (213C1A0509)
+- - - **M. RADHA KRISHNA** (213C1A0521)
 - - **K. JEEVANA REKHA** (213C1A0519)
 
 **Institution:** D.M.S.S.V.H College of Engineering, Machilipatnam  
