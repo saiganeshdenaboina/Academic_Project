@@ -11,7 +11,7 @@ This project implements a centralized admin management system with role-based ac
 
 
 - - **D.V. SAI GANESH** (213C1A0509)
-- - - **M. RADHA KRISHNA** (213C1A0521)
+- - **M. RADHA KRISHNA** (213C1A0521)
 - - **K. JEEVANA REKHA** (213C1A0519)
 
 **Institution:** D.M.S.S.V.H College of Engineering, Machilipatnam  
@@ -74,7 +74,7 @@ This project implements a centralized admin management system with role-based ac
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/RadhakrishnaMATTA/acedamic_project.git
+git clone https://github.com/saiganeshdenaboina/Academic_Project
 cd acedamic_project
 ```
 
